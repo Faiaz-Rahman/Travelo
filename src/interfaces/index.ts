@@ -12,6 +12,7 @@ export interface SearchLayoutProps {
 export interface HomeLayoutProps {
   children: React.ReactNode
   noScroll: boolean
+  showHeader?: boolean
 }
 
 export interface PopularListType {

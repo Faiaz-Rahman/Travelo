@@ -84,7 +84,7 @@ const authSlice = createSlice({
     updateAuthLoader: (state, actions) => {
       state.authLoader = actions.payload
     },
-    logout: (state, actions) => {
+    logout: (state, _) => {
       Object.assign(state, initialState)
     },
     setFcmToken: (

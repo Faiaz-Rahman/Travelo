@@ -82,7 +82,6 @@ export default function Signup() {
         icon={<Ionicons name="text" size={20} color={'#fff'} />}
         placeholder="name (john doe)"
         onChangeText={text => {
-          //   setEmail(text)
           signupForm.setFieldValue('name', text)
         }}
         errorMessage={signupForm.errors.name}
@@ -92,7 +91,6 @@ export default function Signup() {
         icon={<Ionicons name="mail" size={20} color={'#fff'} />}
         placeholder="email (example@example.com)"
         onChangeText={text => {
-          //   setEmail(text)
           signupForm.setFieldValue('email', text)
         }}
         errorMessage={signupForm.errors.email}
@@ -104,7 +102,6 @@ export default function Signup() {
         placeholder="password ... "
         isPassword
         onChangeText={text => {
-          //   setPassword(text)
           signupForm.setFieldValue('pass', text)
         }}
         errorMessage={signupForm.errors.pass}
@@ -115,7 +112,6 @@ export default function Signup() {
         placeholder="confirm password ... "
         isPassword
         onChangeText={text => {
-          //   setPassword(text)
           signupForm.setFieldValue('confPass', text)
         }}
         errorMessage={signupForm.errors.confPass}
