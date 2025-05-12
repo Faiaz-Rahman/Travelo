@@ -6,31 +6,40 @@ import AppText from '@components/common/Text'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { HomeLayoutProps } from 'src/interfaces'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 export default function HomeLayout({
   children,
   noScroll = true,
+  showHeader = true,
 }: HomeLayoutProps) {
+  const { userInfo } = useSelector((state: RootState) => state.auth)
+
   // console.log(Colors);
   return (
     <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
       {/* Header */}
-      <View style={styles.header}>
-        <AppText styles={styles.greetText}>Good Morning, Alex.</AppText>
+      {showHeader && (
+        <View style={styles.header}>
+          <AppText styles={styles.greetText}>
+            Greetings, {userInfo.email}
+          </AppText>
 
-        <TouchableOpacity
-          style={styles.headerIconWrapper}
-          onPress={() => {
-            // console.log('notifications')
-          }}>
-          <MaterialCommunityIcons
-            name="email-outline"
-            size={20}
-            color={Colors.white}
-          />
-          <View style={styles.badge} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.headerIconWrapper}
+            onPress={() => {
+              // console.log('notifications')
+            }}>
+            <MaterialCommunityIcons
+              name="email-outline"
+              size={20}
+              color={Colors.white}
+            />
+            <View style={styles.badge} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {!noScroll ? (
         <ScrollView

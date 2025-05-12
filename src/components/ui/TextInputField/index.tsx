@@ -1,10 +1,12 @@
+import { useState } from 'react'
+
 import {
   View,
   StyleSheet,
   TextInput as TextInputRN,
   Pressable,
 } from 'react-native'
-import { useState } from 'react'
+
 import { Colors, Dim } from '@constants'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'

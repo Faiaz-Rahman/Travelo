@@ -1,6 +1,11 @@
 import AppText from '@components/common/Text'
 import { Colors, Dim } from '@constants'
-import { Pressable, StyleSheet, ActivityIndicator } from 'react-native'
+import {
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+  ViewStyle,
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
 interface ButtonProps {
@@ -8,6 +13,7 @@ interface ButtonProps {
   title: string
   disabled?: boolean
   loading?: boolean
+  style?: ViewStyle
 }
 
 export default function Button({
@@ -15,9 +21,13 @@ export default function Button({
   title,
   disabled = false,
   loading = false,
+  style,
 }: ButtonProps) {
   return (
-    <Pressable style={styles.button} onPress={onPress} disabled={disabled}>
+    <Pressable
+      style={[styles.button, { ...style }]}
+      onPress={onPress}
+      disabled={disabled}>
       <LinearGradient
         colors={Colors.gradient}
         end={{ x: 1, y: 1 }}
