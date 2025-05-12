@@ -9,6 +9,9 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 import LinearGradient from 'react-native-linear-gradient'
 import Search from '@screens/Search'
+import AddNewPost from '@screens/AddNewPost'
+import Profile from '@screens/Profile'
+import Notification from '@screens/Notification'
 
 const Tab = createBottomTabNavigator()
 
@@ -57,7 +60,7 @@ export const HomeRouter = (): React.JSX.Element => {
 
       <Tab.Screen
         name="post"
-        component={Home}
+        component={AddNewPost}
         options={{
           tabBarIcon: ({ color, focused, size }) => {
             return (
@@ -82,7 +85,7 @@ export const HomeRouter = (): React.JSX.Element => {
 
       <Tab.Screen
         name="notification"
-        component={Home}
+        component={Notification}
         options={{
           tabBarIcon: ({ color, focused, size }) => {
             return <Feather name="bell" size={20} color={color} />
@@ -92,7 +95,7 @@ export const HomeRouter = (): React.JSX.Element => {
 
       <Tab.Screen
         name="profile"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ color, focused, size }) => {
             return <FontAwesome5 name="user-circle" size={20} color={color} />
