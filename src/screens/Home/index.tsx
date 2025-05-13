@@ -19,7 +19,8 @@ interface PostType {
 }
 
 export default function Home() {
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  // const { userInfo } = useSelector((state: RootState) => state.auth)
+
   const [posts, setPosts] = useState<PostType[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)

@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { HomeLayoutProps } from 'src/interfaces'
 import { useSelector } from 'react-redux'
 import { RootState } from '@store/index'
+import { useNavigation } from '@react-navigation/native'
 
 export default function HomeLayout({
   children,
@@ -15,6 +16,7 @@ export default function HomeLayout({
   showHeader = true,
 }: HomeLayoutProps) {
   const { userInfo } = useSelector((state: RootState) => state.auth)
+  const navigation = useNavigation()
 
   // console.log(Colors);
   return (
@@ -30,6 +32,7 @@ export default function HomeLayout({
             style={styles.headerIconWrapper}
             onPress={() => {
               // console.log('notifications')
+              navigation.navigate('chatlist' as never)
             }}>
             <MaterialCommunityIcons
               name="email-outline"
