@@ -13,13 +13,17 @@ import { useFormik } from 'formik'
 
 import { validationSchemaForLogin } from '../../../src/schema'
 import { useAppDispatch } from '@store/index'
-import { login } from '@store/slices/authSlice'
+import { login, updateUsername, updateUserSince } from '@store/slices/authSlice'
+
+import firestore from '@react-native-firebase/firestore'
+import { useDispatch } from 'react-redux'
 
 export default function Login() {
   const navigation = useNavigation()
   const [loading, setLoading] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
+  const dispatchAction = useDispatch()
 
   const loginForm = useFormik({
     initialValues: {
@@ -32,9 +36,6 @@ export default function Login() {
     },
   })
 
-  //   React.useEffect(() => {
-  //     console.log(email)
-  //   }, [email])
   const onPressLogin = async () => {
     setLoading(true)
     try {
@@ -45,14 +46,27 @@ export default function Login() {
         }),
       )
         .unwrap()
-        .then(() => {
+        .then(async val => {
+          // console.log('the login value =>', val)
+          // val.uid
+          const userData = await firestore()
+            .collection('users')
+            .doc(val.uid)
+            .get()
+
+          if (userData.data()) {
+            // console.log('the user data from query =>', userData.data())
+
+            dispatchAction(updateUsername(userData.data()?.name))
+            dispatchAction(updateUserSince(userData.data()?.createdAt))
+          }
+
           setTimeout(() => {
             setLoading(false)
           }, 2500)
         })
     } catch (error: any) {
       ToastAndroid.showWithGravity(error, 1500, 10)
-      // console.log('error in login =>', error);
       setLoading(false)
     }
   }
