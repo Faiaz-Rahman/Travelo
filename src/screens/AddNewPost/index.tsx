@@ -38,7 +38,7 @@ export default function AddNewPost() {
   const [text, setText] = useState<string>('')
   const [selectedImage, setSelectedImage] = useState<any>(null)
 
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, username } = useSelector((state: RootState) => state.auth)
 
   const onSelectImage = async () => {
     const options: ImageLibraryOptions = {
@@ -112,6 +112,7 @@ export default function AddNewPost() {
                   postText: text,
                   createdAt: new Date().toDateString(),
                   image: publicURL,
+                  username,
                 },
                 ...existingData,
               ],
@@ -126,6 +127,7 @@ export default function AddNewPost() {
                   postText: text,
                   createdAt: new Date().toDateString(),
                   image: publicURL,
+                  username,
                 },
               ],
             })
