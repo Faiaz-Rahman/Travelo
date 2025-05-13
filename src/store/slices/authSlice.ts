@@ -16,6 +16,8 @@ interface StateType {
   userInfo: UserType
   refreshToken: string
   fcmToken: string
+  createdAt: string
+  username: string
 }
 
 const initialState: StateType = {
@@ -30,6 +32,8 @@ const initialState: StateType = {
   },
   refreshToken: '',
   fcmToken: '',
+  createdAt: '',
+  username: '',
 }
 
 export const login = createAsyncThunk(
@@ -111,6 +115,12 @@ const authSlice = createSlice({
 
       state.isAuthenticated = true
     },
+    updateUserSince: (state, actions) => {
+      state.createdAt = actions.payload
+    },
+    updateUsername: (state, actions) => {
+      state.username = actions.payload
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.pending, (state, action) => {
@@ -138,6 +148,8 @@ export const {
   updateAuthLoader,
   logout,
   setFcmToken,
+  updateUsername,
+  updateUserSince,
 } = authSlice.actions
 
 export default authSlice.reducer
