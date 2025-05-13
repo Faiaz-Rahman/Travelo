@@ -1,5 +1,5 @@
-// import React from 'react'
-import React, { useState } from 'react'
+import { useState } from 'react'
+
 import {
   View,
   StyleSheet,
@@ -9,12 +9,13 @@ import {
   ToastAndroid,
 } from 'react-native'
 
-import AppText from '@components/common/Text'
 import HomeLayout from '@layouts/HomeLayout'
 import { Colors, Dim } from '@constants'
 
 import LinearGradient from 'react-native-linear-gradient'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import AppText from '@components/common/Text'
 import AutoGrowTextInput from '@components/ui/AutoGrowTextInput'
 import Button from '@components/ui/Button'
 
@@ -38,10 +39,6 @@ export default function AddNewPost() {
   const [selectedImage, setSelectedImage] = useState<any>(null)
 
   const { userInfo } = useSelector((state: RootState) => state.auth)
-
-  React.useEffect(() => {
-    console.log(selectedImage)
-  }, [selectedImage])
 
   const onSelectImage = async () => {
     const options: ImageLibraryOptions = {
@@ -78,8 +75,6 @@ export default function AddNewPost() {
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
       const fileName = `post-${timestamp}.${ext}`
 
-      // const response = await fetch(selectedImage.uri)
-      // const blob = await response.blob()
       const fileVal = await ReactNativeBlobUtil.fs.readFile(
         selectedImage?.uri.replace('file:///', ''),
         'base64',
@@ -88,7 +83,6 @@ export default function AddNewPost() {
 
       const { error, data } = await supabase.storage
         .from('travelo')
-        // .upload(fileName, blob, {})
         .upload(fileName, binary, {
           upsert: false,
           contentType: 'image/jpeg',
@@ -107,24 +101,39 @@ export default function AddNewPost() {
           .get()
 
         if (postsInFB.exists()) {
-          let existingData: any = postsInFB.data()
+          let existingData: any = postsInFB.data()?.posts
+
           await firebase()
             .collection('posts')
             .doc(userInfo.uid)
-            .set([
-              {
-                postText: text,
-                createdAt: new Date().toDateString(),
-                image: publicURL,
-              },
-              ...existingData,
-            ])
+            .set({
+              posts: [
+                {
+                  postText: text,
+                  createdAt: new Date().toDateString(),
+                  image: publicURL,
+                },
+                ...existingData,
+              ],
+            })
+        } else {
+          await firebase()
+            .collection('posts')
+            .doc(userInfo.uid)
+            .set({
+              posts: [
+                {
+                  postText: text,
+                  createdAt: new Date().toDateString(),
+                  image: publicURL,
+                },
+              ],
+            })
         }
 
         ToastAndroid.showWithGravity('Post Uploaded!', 1500, 10)
       }
     } catch (err) {
-      console.log(err)
       if (err instanceof Error) {
         ToastAndroid.showWithGravity(`Error: ${err.message}`, 1500, 10)
       }
@@ -201,6 +210,8 @@ export default function AddNewPost() {
           style={{
             width: Dim.width * 0.5,
           }}
+          loading={loading}
+          disabled={loading}
         />
       </View>
     </HomeLayout>
