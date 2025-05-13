@@ -13,10 +13,12 @@ import auth from '@react-native-firebase/auth'
 import HomeLayout from '@layouts/HomeLayout'
 import Button from '@components/ui/Button'
 import AppText from '@components/common/Text'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { logout } from '@store/slices/authSlice'
 import { Colors } from '@constants'
-import { persistor } from '@store/index'
+
+import { persistor, RootState } from '@store/index'
 
 export default function Profile() {
   const [user, setUser] = useState<any>({
@@ -27,6 +29,9 @@ export default function Profile() {
   const [loading, setLoading] = useState<boolean>(true)
   const [logoutLoader, setLogoutLoader] = useState<boolean>(false)
 
+  const { userInfo, createdAt, username } = useSelector(
+    (state: RootState) => state.auth,
+  )
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -90,7 +95,7 @@ export default function Profile() {
             styles={{
               marginTop: 5,
             }}>
-            {user?.name}
+            {username}
           </AppText>
 
           <Text style={styles.label}>Email Address</Text>
@@ -98,7 +103,7 @@ export default function Profile() {
             styles={{
               marginTop: 5,
             }}>
-            {user?.email}
+            {userInfo.email}
           </AppText>
 
           <Text style={styles.label}>User Since</Text>
@@ -106,7 +111,7 @@ export default function Profile() {
             styles={{
               marginTop: 5,
             }}>
-            {user?.createdAt}
+            {createdAt}
           </AppText>
         </View>
 
