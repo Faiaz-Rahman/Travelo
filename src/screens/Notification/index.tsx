@@ -15,7 +15,6 @@ export default function Notification() {
         }}>
         <AppText>No new notifications!</AppText>
       </View>
-      <Text>index</Text>
     </HomeLayout>
   )
 }

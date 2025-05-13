@@ -17,8 +17,21 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import AppText from '@components/common/Text'
 import { useInteractionManager } from '@hooks/useInteractionManager'
+import moment from 'moment'
 
-export default function Post() {
+interface PostProps {
+  imageUrl: string
+  title: string
+  createdAt: string
+  username: string
+}
+
+export default function Post({
+  imageUrl,
+  title,
+  createdAt,
+  username,
+}: PostProps) {
   const {
     isLiked,
     isBookmarked,
@@ -27,19 +40,6 @@ export default function Post() {
     updateIsLiked,
     updateShowComments,
   } = useInteractionManager()
-
-  const [activeIndex, setActiveIndex] = useState<number>(0)
-
-  const handleIndex = ({
-    nativeEvent,
-  }: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offset = nativeEvent.contentOffset
-    // console.log(Math.floor(offset.x / Dim.width))
-
-    const index = Math.ceil(offset.x / Dim.width)
-    // console.log(index, offset.x);
-    setActiveIndex(index)
-  }
 
   return (
     <View style={styles.post}>
@@ -52,8 +52,10 @@ export default function Post() {
             resizeMode="contain"
           />
           <View>
-            <AppText styles={styles.userName}>Jacob Washington</AppText>
-            <AppText styles={styles.timestamp}>20m ago</AppText>
+            <AppText styles={styles.userName}>{username}</AppText>
+            <AppText styles={styles.timestamp}>
+              {moment(createdAt).format('ll')}
+            </AppText>
           </View>
         </View>
 
@@ -66,69 +68,23 @@ export default function Post() {
         </TouchableOpacity>
       </View>
 
-      {/* post image  */}
-      <FlatList
-        data={[1, 2]}
-        horizontal
-        snapToAlignment="center"
-        decelerationRate={0}
-        disableIntervalMomentum={true}
-        snapToInterval={Dim.width}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          height: 200,
-          paddingLeft: Dim.width * 0.075,
-          paddingRight: Dim.width * 0.075,
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={() => {
-          return <View style={{ height: 200, width: 15 }} />
-        }}
-        onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) =>
-          handleIndex(e)
-        }
-        renderItem={({ item, index }) => {
-          return (
-            <TouchableHighlight
-              style={styles.postImageWrapper}
-              underlayColor={'rgba(0,0,0,0.6)'}
-              onPress={() => {
-                // console.log('next ...');
-              }}>
-              <Image
-                source={require(`../../../assets/images/post1.png`)}
-                style={styles.postImage}
-                resizeMode="cover"
-              />
-            </TouchableHighlight>
-          )
-        }}
-      />
-
-      <View style={styles.thumbWrapper}>
-        {[1, 2].map((item, ind) => {
-          return (
-            <View
-              key={ind}
-              style={[
-                styles.thumb,
-                {
-                  backgroundColor:
-                    ind === activeIndex
-                      ? Colors.socialPink
-                      : Colors.lighterGray,
-                },
-              ]}
-            />
-          )
-        })}
-      </View>
+      <TouchableHighlight
+        style={styles.postImageWrapper}
+        underlayColor={'rgba(0,0,0,0.6)'}
+        onPress={() => {
+          // console.log('next ...');
+        }}>
+        <Image
+          source={{
+            uri: imageUrl,
+          }}
+          style={styles.postImage}
+          resizeMode="cover"
+        />
+      </TouchableHighlight>
 
       <View style={styles.textWrapper}>
-        <AppText styles={styles.postText}>
-          “If you think you are too small to make a difference, try sleeping
-          with a mosquito.” ~ Dalai Lama
-        </AppText>
+        <AppText styles={styles.postText}>{title}</AppText>
       </View>
 
       {/* interaction wrapper */}
@@ -187,6 +143,7 @@ const styles = StyleSheet.create({
     width: Dim.width,
     alignSelf: 'center',
     marginTop: 20,
+    alignItems: 'center',
   },
   postHeader: {
     height: 45,

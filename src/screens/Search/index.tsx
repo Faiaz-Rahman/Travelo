@@ -6,14 +6,7 @@ import { Dim } from '@constants'
 
 import AppText from '@components/common/Text'
 
-import Post from '@components/common/Post'
-
 export default function Search() {
-  const [selectedPopularCategory, setSelectedPopularCategory] = useState<any>({
-    _id: 1,
-    title: 'All',
-  })
-
   return (
     <SearchLayout noScroll={false}>
       <View>
@@ -21,21 +14,15 @@ export default function Search() {
           style={{
             width: Dim.standardWidth,
             alignSelf: 'center',
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <AppText styles={styles.heading}>Popular</AppText>
-
-          <View>
-            <FlatList
-              data={[1, 2, 3, 4]}
-              keyExtractor={item => item.toString()}
-              contentContainerStyle={{
-                paddingBottom: Dim.height * 0.1,
-              }}
-              renderItem={({ item, index }) => {
-                return <Post key={`post_${index}`} />
-              }}
-            />
-          </View>
+          <AppText styles={styles.heading}>Nothing to show ...</AppText>
         </View>
       </View>
     </SearchLayout>
@@ -44,8 +31,7 @@ export default function Search() {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Light',
     marginBottom: 10,
   },
 })
