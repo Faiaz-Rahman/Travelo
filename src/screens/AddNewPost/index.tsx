@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   View,
@@ -7,6 +7,8 @@ import {
   Alert,
   Image,
   ToastAndroid,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native'
 
 import HomeLayout from '@layouts/HomeLayout'
@@ -33,10 +35,18 @@ import { supabase } from '@utils/supabase'
 import ReactNativeBlobUtil from 'react-native-blob-util'
 import { Buffer } from 'buffer'
 
+import Geolocation from 'react-native-geolocation-service'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+
 export default function AddNewPost() {
   const [loading, setLoading] = useState<boolean>(false)
   const [text, setText] = useState<string>('')
   const [selectedImage, setSelectedImage] = useState<any>(null)
+
+  const [location, setLocation] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
 
   const { userInfo, username } = useSelector((state: RootState) => state.auth)
 
@@ -144,6 +154,39 @@ export default function AddNewPost() {
     }
   }
 
+  const hasLocationPermission = async () => {
+    if (Platform.OS === 'ios') return true
+
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    )
+    return granted === PermissionsAndroid.RESULTS.GRANTED
+  }
+
+  const getLocation = async () => {
+    const permission = await hasLocationPermission()
+    if (!permission) return
+
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        setLocation({ latitude, longitude })
+      },
+      error => {
+        console.error('Location error:', error)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+      },
+    )
+  }
+
+  useEffect(() => {
+    // getLocation()
+  }, [])
+
   return (
     <HomeLayout noScroll={false} showHeader={false}>
       <View style={styles.addNewPost}>
@@ -201,6 +244,26 @@ export default function AddNewPost() {
             setText(text)
           }}
         />
+        {location && (
+          <>
+            <MapView
+              style={StyleSheet.absoluteFillObject}
+              provider={PROVIDER_GOOGLE}
+              showsUserLocation={true}
+              region={{
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}>
+              <Marker
+                coordinate={location}
+                title="You are here"
+                description={`Lat: ${location.latitude}, Lng: ${location.longitude}`}
+              />
+            </MapView>
+          </>
+        )}
 
         <Button
           title="Upload"
