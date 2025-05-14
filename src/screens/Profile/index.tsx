@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
   View,
@@ -19,6 +19,7 @@ import { logout } from '@store/slices/authSlice'
 import { Colors } from '@constants'
 
 import { persistor, RootState } from '@store/index'
+import { SocketContext } from '../../socket/SocketContext'
 
 export default function Profile() {
   const [user, setUser] = useState<any>({
@@ -33,6 +34,8 @@ export default function Profile() {
     (state: RootState) => state.auth,
   )
   const dispatch = useDispatch()
+  const { connectSocket, disconnectSocket, emitUserOnline } =
+    useContext(SocketContext)
 
   useEffect(() => {
     const currentUser = auth().currentUser
@@ -51,6 +54,8 @@ export default function Profile() {
     try {
       await auth().signOut()
       dispatch(logout({}))
+      disconnectSocket()
+
       await persistor.purge()
 
       ToastAndroid.showWithGravity(
