@@ -11,7 +11,9 @@ import LinearGradient from 'react-native-linear-gradient'
 import Search from '@screens/Search'
 import AddNewPost from '@screens/AddNewPost'
 import Profile from '@screens/Profile'
-import Notification from '@screens/Notification'
+import ActiveUsersList from '@screens/ActiveUsersList'
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Tab = createBottomTabNavigator()
 
@@ -84,11 +86,17 @@ export const HomeRouter = (): React.JSX.Element => {
       />
 
       <Tab.Screen
-        name="notification"
-        component={Notification}
+        name="active_users_list"
+        component={ActiveUsersList}
         options={{
           tabBarIcon: ({ color, focused, size }) => {
-            return <Feather name="bell" size={20} color={color} />
+            return (
+              <MaterialCommunityIcons
+                name="message-outline"
+                size={20}
+                color={color}
+              />
+            )
           },
         }}
       />
