@@ -52,6 +52,10 @@ Move to the project's root directory after cloning the project and, run
    yarn start
 ```
 
+## Socket for live status of user
+
+Custom **Socket** server has been implemented and deployed to [**Render**]("https://render.com/") for free using **socket-io**. As soon as an user logs in the live status of user is shown right in the header. Clicking on it, it displays the list of active user whom he can send messages to.
+
 ## Realtime messaging
 
 For realtime messaging firebase has been used. Also, for the messaging screen, **react-native-gifted-chat** has been used for a better experience.
