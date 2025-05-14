@@ -1,79 +1,61 @@
+# Travelo
+
+This is a travel blogging app where users can share their travel stories and upload images. They can send messages via this app.
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
+> **Note**: For This project yarn has been used as the package manager.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Typescript
 
-## Step 1: Start the Metro Server
+Typescript has been throughout all the project instead of Javascript for a better structured project and avoiding null or, undefined errors. Also, Type definitions has been done into a separate file for better project structure.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Authentication
 
-To start Metro, run the following command from the _root_ of your React Native project:
+For Authentication **Firebase** has been used to authenticate users.
 
-```bash
-# using npm
-npm start
+## Database
 
-# OR using Yarn
-yarn start
+For Database **Firebase Firestore** has been used to store user credentials and information.
+
+## Storage
+
+For storing image uploaded by user **Supabase** has been used to store the image as binary.
+First the image is converted to base64 and then, converted to binary internally. Hence, uploaded to the supabase storage.
+
+As, per Firebase policy from **October, 2024**, user with **Spark Plan** won't be able to use storage. User would need **Pay as you go Blaze Plan** for using the Firebase storage.
+
+## Custom Components
+
+For components no third-party library has been used so that, the bundle size for the application remain smaller.
+
+## Global Store
+
+For this application **Redux toolkit** has been used for global store. **Redux - Thunk** has been used for Asynchronous requests to Firebase and Supabase. **Redux-Persist** has been used to persist data, even if the app is in the background or, quit state.
+
+## Form Validation
+
+For Form validation, **Yup** and, **Formik** has been used, for dynamic form validation.
+
+## Credentials
+
+```
+   email: test@xyz.com
+   password: Password@321
 ```
 
-## Step 2: Start your Application
+## To run the project locally
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Move to the project's root directory after cloning the project and, run
 
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+   yarn start
 ```
 
-### For iOS
+## Realtime messaging
 
-```bash
-# using npm
-npm run ios
+For realtime messaging firebase has been used. Also, for the messaging screen, **react-native-gifted-chat** has been used for a better experience.
 
-# OR using Yarn
-yarn ios
-```
+## Versioning
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+React-Native version **0.75.3** has been used for this project, as locally I had the gradle, gradle wrapper already set up, to reduce the production time.
