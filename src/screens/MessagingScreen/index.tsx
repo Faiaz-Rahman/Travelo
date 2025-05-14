@@ -3,22 +3,33 @@ import { View, StyleSheet } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import { GiftedChat, IMessage, User } from 'react-native-gifted-chat'
 import { RouteProp, useRoute } from '@react-navigation/native'
+import HomeLayout from '@layouts/HomeLayout'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
-type MessagingScreenRouteProp = RouteProp<any, 'MessagingScreen'>
+type MessagingScreenRouteProp = RouteProp<RootStackParamList, 'chat_details'>
+
+import { RootStackParamList } from '@routes/MainRouter'
+import { Colors } from '@constants'
 
 export default function MessagingScreen() {
   const route = useRoute<MessagingScreenRouteProp>()
-  const { currentUserId, otherUser } = route.params
+  const { otherUser } = route.params
+
+  console.log(otherUser)
+  const { userInfo } = useSelector((state: RootState) => state.auth)
 
   const [messages, setMessages] = useState<IMessage[]>([])
 
   const currentUser: User = {
-    _id: currentUserId,
+    _id: userInfo.uid,
     name: 'Current User',
     avatar: 'https://i.pravatar.cc/300',
   }
 
-  const chatId = [currentUserId, otherUser.id].sort().join('_')
+  const chatId = [currentUser._id, otherUser.id].sort().join('_')
+
+  console.log(chatId)
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -55,17 +66,26 @@ export default function MessagingScreen() {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <GiftedChat
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        user={currentUser}
-        placeholder={`Chat with ${otherUser.name}`}
-        alwaysShowSend
-        showUserAvatar
-        renderUsernameOnMessage
-      />
-    </View>
+    <HomeLayout
+      noScroll={true}
+      showHeader={false}
+      backHeader
+      username={otherUser.name}>
+      <View style={styles.container}>
+        <GiftedChat
+          messages={messages}
+          onSend={messages => onSend(messages)}
+          user={currentUser}
+          placeholder={`Chat with ${otherUser.name}`}
+          alwaysShowSend
+          showUserAvatar
+          renderUsernameOnMessage
+          textInputProps={{
+            color: Colors.socialPink,
+          }}
+        />
+      </View>
+    </HomeLayout>
   )
 }
 
