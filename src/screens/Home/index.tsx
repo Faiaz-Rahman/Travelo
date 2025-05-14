@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 
 import { Colors, Dim } from '@constants'
@@ -7,9 +7,7 @@ import HomeLayout from '@layouts/HomeLayout'
 import Post from '@components/common/Post'
 
 import firestore from '@react-native-firebase/firestore'
-
-import { useSelector } from 'react-redux'
-import { RootState } from '@store/index'
+import { SocketContext } from '../../socket/SocketContext'
 
 interface PostType {
   title: string
@@ -19,8 +17,6 @@ interface PostType {
 }
 
 export default function Home() {
-  // const { userInfo } = useSelector((state: RootState) => state.auth)
-
   const [posts, setPosts] = useState<PostType[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)

@@ -1,4 +1,11 @@
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Pressable,
+  Image,
+} from 'react-native'
 
 import { Colors, Dim } from '@constants'
 
@@ -10,15 +17,33 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import { useNavigation } from '@react-navigation/native'
 
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import React, { useContext } from 'react'
+import { SocketContext } from '../socket/SocketContext'
+
 export default function HomeLayout({
   children,
   noScroll = true,
   showHeader = true,
+  backHeader = false,
+  username,
+  active = false,
 }: HomeLayoutProps) {
   const { userInfo } = useSelector((state: RootState) => state.auth)
   const navigation = useNavigation()
 
-  // console.log(Colors);
+  const { connectSocket, disconnectSocket, emitUserOnline } =
+    useContext(SocketContext)
+  const { isConnected } = useContext(SocketContext)
+
+  const socketEvent = () => {
+    connectSocket()
+  }
+
+  React.useEffect(() => {
+    socketEvent()
+  }, [])
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
       {/* Header */}
@@ -32,15 +57,51 @@ export default function HomeLayout({
             style={styles.headerIconWrapper}
             onPress={() => {
               // console.log('notifications')
-              navigation.navigate('chatlist' as never)
+              navigation.navigate('active_users_list' as never)
             }}>
             <MaterialCommunityIcons
               name="email-outline"
               size={20}
               color={Colors.white}
             />
-            <View style={styles.badge} />
+            <View
+              style={[
+                styles.badge,
+                { backgroundColor: isConnected ? 'green' : Colors.socialPink },
+              ]}
+            />
           </TouchableOpacity>
+        </View>
+      )}
+
+      {backHeader && username && (
+        <View style={styles.backHeaderWrapper}>
+          <Pressable
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack()
+              }
+            }}>
+            <Ionicons name="chevron-back" size={25} color={Colors.white} />
+          </Pressable>
+          <Image
+            source={require('@assets/images/user1.png')}
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 50,
+              marginLeft: 10,
+            }}
+          />
+
+          <AppText
+            styles={{
+              fontSize: 16,
+              fontFamily: 'Roboto-SemiBold',
+              marginLeft: 10,
+            }}>
+            {username}
+          </AppText>
         </View>
       )}
 
@@ -92,7 +153,14 @@ const styles = StyleSheet.create({
   },
   greetText: {
     fontSize: 17,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Roboto-SemiBold',
     color: Colors.white,
+  },
+  backHeaderWrapper: {
+    height: Dim.height * 0.07,
+    paddingTop: 30,
+    flexDirection: 'row',
+    paddingLeft: Dim.width * 0.075,
+    alignItems: 'center',
   },
 })

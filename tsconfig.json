@@ -13,6 +13,7 @@
       "@store/*": ["./src/store/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@schema/*": ["./src/schema"],
+      "@socket": ["./src/socket"],
       "underscore": ["lodash"],
       "react": ["./node_modules/@types/react"]
     }

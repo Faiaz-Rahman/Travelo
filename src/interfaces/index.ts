@@ -13,6 +13,9 @@ export interface HomeLayoutProps {
   children: React.ReactNode
   noScroll: boolean
   showHeader?: boolean
+  backHeader?: boolean
+  username?: string
+  active?: boolean
 }
 
 export interface PopularListType {
