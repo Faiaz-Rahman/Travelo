@@ -9,7 +9,7 @@ import AppText from '@components/common/Text'
 export default function Search() {
   return (
     <SearchLayout noScroll={false}>
-      <View>
+      <View style={{ paddingTop: 20 }}>
         <View
           style={{
             width: Dim.standardWidth,

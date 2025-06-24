@@ -1,24 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import auth from '@react-native-firebase/auth'
 import { PayloadAction } from '@reduxjs/toolkit'
-
-interface UserType {
-  email: string | null
-  photoUrl: null | string
-  displayName: string | null
-  uid: string
-}
-
-interface StateType {
-  isAuthenticated: boolean
-  authToken: string | null
-  authLoader: boolean
-  userInfo: UserType
-  refreshToken: string
-  fcmToken: string
-  createdAt: string
-  username: string
-}
+import { StateType } from 'src/interfaces'
 
 const initialState: StateType = {
   isAuthenticated: false,

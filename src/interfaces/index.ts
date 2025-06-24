@@ -1,3 +1,5 @@
+import { TextStyle } from 'react-native'
+
 export interface PopularListItemProp {
   title?: string
   selected: boolean
@@ -16,6 +18,7 @@ export interface HomeLayoutProps {
   backHeader?: boolean
   username?: string
   active?: boolean
+  headerTitle?: string
 }
 
 export interface PopularListType {
@@ -32,4 +35,34 @@ interface PostProps {
   timestamp: string
   userName: string
   userImage?: string
+}
+
+export interface UserType {
+  email: string | null
+  photoUrl: null | string
+  displayName: string | null
+  uid: string
+}
+
+export interface StateType {
+  isAuthenticated: boolean
+  authToken: string | null
+  authLoader: boolean
+  userInfo: UserType
+  refreshToken: string
+  fcmToken: string
+  createdAt: string
+  username: string
+}
+
+export interface AppTextInputProps {
+  style?: TextStyle
+  placeholder: string
+  placeholderTextColor: string
+  onFocus: () => void
+  onBlur: () => void
+  onChangeText: (text: string) => void
+  children?: React.ReactNode
+  useGradient?: boolean
+  cursorColor?: string
 }

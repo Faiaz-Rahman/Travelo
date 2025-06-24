@@ -12,6 +12,8 @@ import { Colors, Dim } from '@constants'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AppText from '@components/common/Text'
 
+import { ViewStyle } from 'react-native'
+
 interface TextInputField {
   icon: React.ReactNode
   isPassword?: boolean
@@ -26,6 +28,8 @@ interface TextInputField {
     | 'email-address'
     | 'phone-pad'
     | 'url'
+  outerWrapper?: ViewStyle
+  innerWrapper?: ViewStyle
 }
 
 export default function TextInput({
@@ -35,22 +39,26 @@ export default function TextInput({
   onChangeText,
   errorMessage,
   keyboardType,
+  outerWrapper,
+  innerWrapper,
 }: TextInputField) {
   const [selected, setSelected] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   return (
-    <View>
+    <View style={outerWrapper}>
       <View
         style={[
           styles.textInputWrapper,
           {
-            borderColor: selected ? Colors.socialPink : '#fff',
+            borderBottomColor: selected ? Colors.socialPink : '#fff',
+            ...innerWrapper,
           },
         ]}>
         <View style={styles.iconWrapper}>{icon}</View>
 
         <TextInputRN
+          cursorColor={Colors.socialPink}
           style={styles.input}
           placeholder={placeholder}
           secureTextEntry={isPassword ? (showPassword ? false : true) : false}
@@ -72,7 +80,7 @@ export default function TextInput({
               setShowPassword(prev => !prev)
             }}>
             {showPassword ? (
-              <Ionicons name="eye-off" color={'#fff'} size={20} />
+              <Ionicons name="eye-off" color={Colors.socialPink} size={20} />
             ) : (
               <Ionicons name="eye" color={'#fff'} size={20} />
             )}
@@ -100,10 +108,9 @@ export default function TextInput({
 const styles = StyleSheet.create({
   textInputWrapper: {
     height: 60,
-    width: Dim.width * 0.85,
-    borderWidth: 2,
-    borderColor: '#fff',
-    borderRadius: 10,
+    width: Dim.width * 0.8,
+    borderBottomWidth: 3,
+    borderBottomColor: '#fff',
     overflow: 'hidden',
     flexDirection: 'row',
   },
@@ -112,17 +119,14 @@ const styles = StyleSheet.create({
     width: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   eyeWrapper: {
     height: 60,
     width: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'red',
   },
   input: {
-    //   backgroundColor: 'red',
     height: '100%',
     flex: 1,
     fontFamily: 'Roboto-Regular',

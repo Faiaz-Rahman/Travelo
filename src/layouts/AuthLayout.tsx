@@ -8,9 +8,7 @@ import {
   Platform,
 } from 'react-native'
 
-import React from 'react'
-
-import { Colors, Dim } from '@constants'
+import { Colors } from '@constants'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -22,23 +20,19 @@ export default function AuthLayout({
   noScroll = true,
 }: AuthLayoutProps) {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Colors.darkBlack,
-      }}>
+    <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
       <StatusBar translucent backgroundColor="transparent" />
 
       {noScroll ? (
         <ImageBackground
-          source={require('@assets/images/tourist.jpg')}
+          source={require('@assets/images/valothaka.jpg')}
           style={styles.noScrollWrapper}>
           <View style={styles.overlay}>{children}</View>
         </ImageBackground>
       ) : (
         <ImageBackground
-          source={require('@assets/images/tourist.jpg')}
-          style={styles.noScrollWrapper}>
+          source={require('@assets/images/valothaka.jpg')}
+          style={[styles.noScrollWrapper]}>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             keyboardVerticalOffset={-50}
@@ -46,12 +40,13 @@ export default function AuthLayout({
               backgroundColor: 'rgba(0,0,0,0.8)',
             }}
             behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
-            <View style={[styles.overlay, { flex: 1 }]}>
+            <View style={[styles.overlay]}>
               <ScrollView
-                keyboardShouldPersistTaps="handled"
+                // keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
-                  paddingTop: Dim.height * 0.15,
-                  alignSelf: 'center',
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   gap: 5,
                 }}>
                 {children}
@@ -74,9 +69,8 @@ const styles = StyleSheet.create({
   overlay: {
     height: '100%',
     width: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.8)',
-    gap: 5,
   },
 })

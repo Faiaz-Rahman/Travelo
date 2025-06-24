@@ -74,13 +74,11 @@ export default function Signup() {
 
   return (
     <AuthLayout noScroll={false}>
-      <AppText styles={styles.signupText}>
-        Sign up now to{'\n'} get started!
-      </AppText>
+      <AppText styles={styles.signupText}>Team ভালো থাকা</AppText>
 
       <TextInput
         icon={<Ionicons name="text" size={20} color={'#fff'} />}
-        placeholder="name (john doe)"
+        placeholder="Name (John Doe)"
         onChangeText={text => {
           signupForm.setFieldValue('name', text)
         }}
@@ -89,7 +87,7 @@ export default function Signup() {
 
       <TextInput
         icon={<Ionicons name="mail" size={20} color={'#fff'} />}
-        placeholder="email (example@example.com)"
+        placeholder="Email (example@example.com)"
         onChangeText={text => {
           signupForm.setFieldValue('email', text)
         }}
@@ -99,7 +97,7 @@ export default function Signup() {
 
       <TextInput
         icon={<Ionicons name="key" size={20} color={'#fff'} />}
-        placeholder="password ... "
+        placeholder="Password ... "
         isPassword
         onChangeText={text => {
           signupForm.setFieldValue('pass', text)
@@ -109,7 +107,7 @@ export default function Signup() {
 
       <TextInput
         icon={<Ionicons name="key" size={20} color={'#fff'} />}
-        placeholder="confirm password ... "
+        placeholder="Confirm Password ... "
         isPassword
         onChangeText={text => {
           signupForm.setFieldValue('confPass', text)
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
   signupText: {
     textAlign: 'center',
     fontSize: 30,
-    fontFamily: 'Roboto-Light',
+    fontFamily: 'Roboto-Regular',
     lineHeight: 45,
     marginBottom: 40,
   },

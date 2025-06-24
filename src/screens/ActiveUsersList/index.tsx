@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react'
 
 import HomeLayout from '@layouts/HomeLayout'
 import AppText from '@components/common/Text'
-import { ActivityIndicator, FlatList, View } from 'react-native'
+import { ActivityIndicator, FlatList, StatusBar, View } from 'react-native'
 import { Colors, Dim } from '@constants'
 
 import socket from '../../socket/socket'
@@ -71,26 +71,16 @@ export default function ActiveUsersList() {
   }, [activeUsers])
 
   return (
-    <HomeLayout noScroll showHeader={false}>
-      <View
-        style={{
-          width: Dim.width,
-          height: Dim.height * 0.1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <AppText
-          styles={{
-            fontSize: 20,
-            fontFamily: 'Poppins-Regular',
-          }}>
-          Active Users
-        </AppText>
-      </View>
-
+    <HomeLayout noScroll showHeader={false} headerTitle="Active Users">
+      <StatusBar
+        backgroundColor={'transparent'}
+        barStyle={'light-content'}
+        translucent
+      />
       {loading ? (
         userDetailsData.length == 0 ? (
-          <View style={{ width: Dim.width, alignItems: 'center' }}>
+          <View
+            style={{ width: Dim.width, alignItems: 'center', paddingTop: 20 }}>
             <AppText>No active users</AppText>
           </View>
         ) : (
@@ -110,7 +100,9 @@ export default function ActiveUsersList() {
                 return null
               }
             }}
-            contentContainerStyle={{}}
+            contentContainerStyle={{
+              paddingTop: 20,
+            }}
             ItemSeparatorComponent={() => {
               return <View style={{ height: 20 }} />
             }}
