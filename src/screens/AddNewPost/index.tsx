@@ -188,12 +188,11 @@ export default function AddNewPost() {
   }, [])
 
   return (
-    <HomeLayout noScroll={false} showHeader={false}>
+    <HomeLayout
+      noScroll={false}
+      showHeader={false}
+      headerTitle="Share with Team ভালো থাকা">
       <View style={styles.addNewPost}>
-        <AppText styles={{ fontSize: 20, fontFamily: 'Poppins-Light' }}>
-          Share your stories ...
-        </AppText>
-
         <View style={{ flexDirection: 'row', gap: 20, alignItems: 'flex-end' }}>
           <Pressable
             style={styles.selectImageWrapper}

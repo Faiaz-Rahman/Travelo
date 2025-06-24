@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lighterGray,
   },
   flatlist: {
-    paddingLeft: Dim.width * 0.06,
-    paddingRight: 30,
+    paddingLeft: Dim.width * 0.075,
+    paddingRight: Dim.width * 0.075,
     paddingBottom: Dim.height * 0.2,
   },
   loader: {

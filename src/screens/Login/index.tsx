@@ -47,16 +47,12 @@ export default function Login() {
       )
         .unwrap()
         .then(async val => {
-          // console.log('the login value =>', val)
-          // val.uid
           const userData = await firestore()
             .collection('users')
             .doc(val.uid)
             .get()
 
           if (userData.data()) {
-            // console.log('the user data from query =>', userData.data())
-
             dispatchAction(updateUsername(userData.data()?.name))
             dispatchAction(updateUserSince(userData.data()?.createdAt))
           }
@@ -72,17 +68,17 @@ export default function Login() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout noScroll={false}>
       <AppText
         styles={{
-          fontSize: 50,
+          fontSize: 30,
           fontFamily: 'Roboto-Bold',
         }}>
-        Travelo
+        Team ভালো থাকা
       </AppText>
 
       <AppText styles={{ marginBottom: 50 }}>
-        Travel the world, share the journey!
+        সবার আগে নিজেকে ভালোবাসতে শিখুন
       </AppText>
 
       <TextInput
@@ -96,7 +92,7 @@ export default function Login() {
 
       <TextInput
         icon={<Ionicons name="key" size={20} color={'#fff'} />}
-        placeholder="password ... "
+        placeholder="Password ... "
         isPassword
         onChangeText={text => {
           //   setPassword(text)

@@ -90,7 +90,7 @@ export default function Profile() {
   }
 
   return (
-    <HomeLayout noScroll>
+    <HomeLayout noScroll showHeader={false} headerTitle="Profile">
       <View style={styles.container}>
         <AppText styles={styles.title}>My Profile</AppText>
 
