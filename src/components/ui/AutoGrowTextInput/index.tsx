@@ -9,6 +9,8 @@ import {
 } from 'react-native'
 
 import { Colors, Dim } from '@constants'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 interface AutoGrowTextInput {
   minHeight?: number
@@ -20,6 +22,8 @@ export default function AutoGrowTextInput({
   onChangeText,
 }: AutoGrowTextInput) {
   const [inputHeight, setInputHeight] = useState<number>(minHeight)
+
+  const { userTheme } = useSelector((state: RootState) => state.auth)
 
   const handleContentSizeChange = (
     event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>,
@@ -33,7 +37,13 @@ export default function AutoGrowTextInput({
         multiline
         onChangeText={onChangeText}
         onContentSizeChange={handleContentSizeChange}
-        style={[styles.textInput, { height: inputHeight }]}
+        style={[
+          styles.textInput,
+          {
+            height: inputHeight,
+            color: userTheme == 'dark' ? Colors.white : Colors.darkBlack,
+          },
+        ]}
         placeholderTextColor={Colors.lighterGray}
         placeholder="add your thoughts here ..."
       />
@@ -48,7 +58,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.socialPink,
     width: Dim.width * 0.85,
     paddingLeft: 20,
-    color: Colors.white,
+
     height: 40,
     fontSize: 14,
     fontFamily: 'Roboto-Regular',

@@ -1,18 +1,30 @@
-import React from 'react'
-
-import { View, Text, TextStyle } from 'react-native'
+import { Colors } from '@constants'
+import { RootState } from '@store/index'
+import { Text, TextStyle } from 'react-native'
+import { useSelector } from 'react-redux'
 
 interface AppText {
   children: React.ReactNode
   styles?: TextStyle
 }
 
-const defaultStyles = {
-  fontSize: 14,
-  fontFamily: 'Poppins-Regular',
-  color: '#fff',
-}
-
 export default function AppText({ children, styles }: AppText) {
-  return <Text style={[defaultStyles, styles]}>{children}</Text>
+  const { userTheme } = useSelector((state: RootState) => state.auth)
+
+  const defaultStyles = {
+    fontSize: 14,
+    fontFamily: 'Poppins-Regular',
+    color: userTheme == 'dark' ? Colors.white : Colors.darkBlack,
+  }
+
+  return (
+    <Text
+      style={[
+        defaultStyles,
+        { color: userTheme == 'dark' ? Colors.white : Colors.darkBlack },
+        styles,
+      ]}>
+      {children}
+    </Text>
+  )
 }
