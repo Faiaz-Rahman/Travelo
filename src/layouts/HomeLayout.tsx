@@ -5,6 +5,7 @@ import {
   ScrollView,
   Pressable,
   Image,
+  useColorScheme,
 } from 'react-native'
 
 import { Colors, Dim } from '@constants'
@@ -13,7 +14,7 @@ import AppText from '@components/common/Text'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { HomeLayoutProps } from 'src/interfaces'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import { useNavigation } from '@react-navigation/native'
 
@@ -21,6 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import React, { useContext } from 'react'
 import { SocketContext } from '../socket/SocketContext'
 import HStack from '@components/common/HStack'
+import { updateTheme } from '@store/slices/authSlice'
 
 export default function HomeLayout({
   children,
@@ -31,22 +33,33 @@ export default function HomeLayout({
   active = false,
   headerTitle,
 }: HomeLayoutProps) {
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, userTheme } = useSelector((state: RootState) => state.auth)
   const navigation = useNavigation()
 
   const { connectSocket } = useContext(SocketContext)
   const { isConnected } = useContext(SocketContext)
+
+  const dispatch = useDispatch()
+  const theme = useColorScheme() == 'dark'
 
   const socketEvent = () => {
     connectSocket()
   }
 
   React.useEffect(() => {
+    if (!userTheme) {
+      dispatch(updateTheme({ theme: theme ? 'dark' : 'light' }))
+    }
+
     socketEvent()
   }, [])
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: userTheme == 'light' ? Colors.white : Colors.darkBlack,
+      }}>
       {/* Header */}
       {showHeader && (
         <View style={styles.header}>
@@ -55,7 +68,13 @@ export default function HomeLayout({
           </AppText>
 
           <TouchableOpacity
-            style={styles.headerIconWrapper}
+            style={[
+              styles.headerIconWrapper,
+              {
+                backgroundColor:
+                  userTheme == 'light' ? Colors.white : Colors.darkBlack,
+              },
+            ]}
             onPress={() => {
               // console.log('notifications')
               navigation.navigate('active_users_list' as never)
@@ -63,7 +82,7 @@ export default function HomeLayout({
             <MaterialCommunityIcons
               name="email-outline"
               size={20}
-              color={Colors.white}
+              color={userTheme == 'light' ? Colors.darkBlack : Colors.white}
             />
             <View
               style={[
@@ -149,12 +168,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerIconWrapper: {
-    height: 32,
-    width: 32,
+    height: 35,
+    width: 35,
     borderColor: Colors.darkGray,
     borderRadius: 32,
-    borderWidth: 1,
-    backgroundColor: Colors.darkBlack,
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -173,7 +191,6 @@ const styles = StyleSheet.create({
   greetText: {
     fontSize: 17,
     fontFamily: 'Roboto-SemiBold',
-    color: Colors.white,
   },
   backHeaderWrapper: {
     height: Dim.height * 0.07,
