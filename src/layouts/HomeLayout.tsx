@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import React, { useContext } from 'react'
 import { SocketContext } from '../socket/SocketContext'
+import HStack from '@components/common/HStack'
 
 export default function HomeLayout({
   children,
@@ -28,12 +29,12 @@ export default function HomeLayout({
   backHeader = false,
   username,
   active = false,
+  headerTitle,
 }: HomeLayoutProps) {
   const { userInfo } = useSelector((state: RootState) => state.auth)
   const navigation = useNavigation()
 
-  const { connectSocket, disconnectSocket, emitUserOnline } =
-    useContext(SocketContext)
+  const { connectSocket } = useContext(SocketContext)
   const { isConnected } = useContext(SocketContext)
 
   const socketEvent = () => {
@@ -105,6 +106,24 @@ export default function HomeLayout({
         </View>
       )}
 
+      {headerTitle && (
+        <HStack
+          style={{
+            paddingTop: 50,
+            // backgroundColor: 'red',
+            paddingLeft: Dim.width * 0.075,
+            paddingRight: Dim.width * 0.075,
+          }}>
+          <AppText
+            styles={{
+              fontFamily: 'Roboto-Bold',
+              fontSize: 18,
+            }}>
+            {headerTitle}
+          </AppText>
+        </HStack>
+      )}
+
       {!noScroll ? (
         <ScrollView
           contentContainerStyle={{
@@ -124,7 +143,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: Dim.standardWidth,
     alignSelf: 'center',
-    marginTop: 16,
+    marginTop: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

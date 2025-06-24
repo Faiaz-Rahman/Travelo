@@ -12,30 +12,29 @@ export default function SearchLayout({
 }: SearchLayoutProps) {
   const [searchText, setSearchText] = useState<string>('')
 
-  //   useEffect(() => {
-  //     console.log(searchText);
-  //   }, [searchText]);
-
   return (
     <View
       style={{
         flex: 1,
         width: Dim.width,
         backgroundColor: Colors.darkBlack,
+        paddingTop: 50,
       }}>
       <StatusBar
         barStyle={'light-content'}
         backgroundColor={Colors.darkBlack}
+        translucent
       />
 
       <View style={styles.searchBarWrapper}>
         <TextInput
           useGradient={false}
-          style={
-            {
-              // width: Dim.width * 0.9,
-            }
-          }
+          style={{
+            // width: Dim.width * 0.9,
+            // backgroundColor: 'red',
+            width: Dim.width * 0.8,
+          }}
+          cursorColor={Colors.socialPink}
           placeholder="Search for people, posts, tags ..."
           onFocus={() => {}}
           onBlur={() => {}}
@@ -59,10 +58,5 @@ export default function SearchLayout({
 }
 
 const styles = StyleSheet.create({
-  searchBarWrapper: {
-    height: 70,
-    // backgroundColor: 'green',
-    width: Dim.width,
-    justifyContent: 'center',
-  },
+  searchBarWrapper: { width: Dim.width, justifyContent: 'center' },
 })
