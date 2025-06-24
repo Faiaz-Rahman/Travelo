@@ -1,6 +1,8 @@
-import React, { createContext, useEffect, useState, useCallback } from 'react'
+import { createContext, useEffect, useState, useCallback } from 'react'
 import socket from '../socket/socket'
+
 import { useSelector } from 'react-redux'
+
 import { RootState } from '@store/index'
 
 type SocketContextType = {
@@ -48,25 +50,25 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const handleConnect = () => {
-      console.log('✅ Connected:', socket.id)
+      console.log('Connected:', socket.id)
       setIsConnected(true)
       emitUserOnline()
     }
 
     const handleDisconnect = () => {
-      console.log('❌ Disconnected from server')
+      console.log('Disconnected from server')
       setIsConnected(false)
     }
 
     const handleActiveUsers = (users: string[]) => {
-      console.log('📡 Active users:', users)
+      console.log('Active users:', users)
       setActiveUsers(users)
     }
 
     socket.on('connect', handleConnect)
     socket.on('disconnect', handleDisconnect)
     socket.on('update-user-status', handleActiveUsers)
-    socket.on('connect_error', err => console.error('🚨 Socket error:', err))
+    socket.on('connect_error', err => console.log('=> Socket error:', err))
 
     return () => {
       socket.off('connect', handleConnect)
