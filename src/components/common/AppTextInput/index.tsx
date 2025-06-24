@@ -11,17 +11,7 @@ import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 
 import { Colors } from '@constants'
-
-interface AppTextInputProps {
-  style?: TextStyle
-  placeholder: string
-  placeholderTextColor: string
-  onFocus: () => void
-  onBlur: () => void
-  onChangeText: (text: string) => void
-  children?: React.ReactNode
-  useGradient?: boolean
-}
+import { AppTextInputProps } from 'src/interfaces'
 
 export default function TextInput({
   style,
@@ -32,10 +22,12 @@ export default function TextInput({
   onChangeText,
   children,
   useGradient = true,
+  cursorColor,
 }: AppTextInputProps) {
   return (
     <View style={[styles.inputWrapper, style]}>
       <RNTextInput
+        cursorColor={cursorColor}
         onChangeText={onChangeText}
         style={styles.input}
         placeholder={placeholder}

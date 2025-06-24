@@ -18,6 +18,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AppText from '@components/common/Text'
 import { useInteractionManager } from '@hooks/useInteractionManager'
 import moment from 'moment'
+import CommentItem from '../CommentItem'
+
+import TextInput from '@components/ui/TextInputField'
+
+import Feather from 'react-native-vector-icons/Feather'
+import Button from '@components/ui/Button'
+import HStack from '../HStack'
 
 interface PostProps {
   imageUrl: string
@@ -134,6 +141,47 @@ export default function Post({
           </TouchableOpacity>
         </View>
       </View>
+
+      {showComments && (
+        <View
+          style={{
+            width: Dim.width * 0.85,
+            paddingTop: 5,
+          }}>
+          <CommentItem username="Akib Hasan" comment="Looking sharp!" />
+          <CommentItem username="Siyam" comment="Nice watch" />
+
+          <HStack
+            style={{
+              // backgroundColor: 'green',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              outerWrapper={{
+                width: Dim.width * 0.6,
+                // backgroundColor: 'red',
+              }}
+              innerWrapper={{
+                width: '100%',
+              }}
+              icon={
+                <Feather size={20} color={Colors.white} name="message-circle" />
+              }
+              onChangeText={() => {}}
+              placeholder="Your comment ..."
+            />
+            <Button
+              title="Send"
+              onPress={() => {}}
+              style={{
+                width: Dim.width * 0.2,
+                height: 40,
+              }}
+            />
+          </HStack>
+        </View>
+      )}
     </View>
   )
 }
