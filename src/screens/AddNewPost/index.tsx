@@ -17,7 +17,6 @@ import { Colors, Dim } from '@constants'
 import LinearGradient from 'react-native-linear-gradient'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import AppText from '@components/common/Text'
 import AutoGrowTextInput from '@components/ui/AutoGrowTextInput'
 import Button from '@components/ui/Button'
 
@@ -48,7 +47,9 @@ export default function AddNewPost() {
     longitude: number
   } | null>(null)
 
-  const { userInfo, username } = useSelector((state: RootState) => state.auth)
+  const { userInfo, username, userTheme } = useSelector(
+    (state: RootState) => state.auth,
+  )
 
   const onSelectImage = async () => {
     const options: ImageLibraryOptions = {
@@ -205,7 +206,14 @@ export default function AddNewPost() {
               end={{ x: 1, y: 0 }}
               locations={[0, 0.25, 0.6]}
               style={styles.gradient}>
-              <View style={styles.innerWrapper}>
+              <View
+                style={[
+                  styles.innerWrapper,
+                  {
+                    backgroundColor:
+                      userTheme == 'dark' ? Colors.darkBlack : Colors.white,
+                  },
+                ]}>
                 {selectedImage?.uri ? (
                   <Image
                     source={{ uri: selectedImage.uri }}
@@ -215,8 +223,11 @@ export default function AddNewPost() {
                 ) : (
                   <Ionicons
                     name="images-outline"
-                    size={40}
-                    style={{ color: Colors.white }}
+                    size={30}
+                    style={{
+                      color:
+                        userTheme == 'dark' ? Colors.white : Colors.darkBlack,
+                    }}
                   />
                 )}
               </View>
@@ -306,7 +317,6 @@ const styles = StyleSheet.create({
   innerWrapper: {
     height: '95%',
     width: '95%',
-    backgroundColor: Colors.darkBlack,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

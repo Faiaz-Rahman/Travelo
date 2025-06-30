@@ -5,8 +5,9 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  Alert,
+  Switch,
   ToastAndroid,
+  useColorScheme,
 } from 'react-native'
 import auth from '@react-native-firebase/auth'
 
@@ -15,7 +16,7 @@ import Button from '@components/ui/Button'
 import AppText from '@components/common/Text'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { logout } from '@store/slices/authSlice'
+import { logout, updateTheme } from '@store/slices/authSlice'
 import { Colors } from '@constants'
 
 import { persistor, RootState } from '@store/index'
@@ -27,15 +28,16 @@ export default function Profile() {
     email: '',
     createdAt: '',
   })
+
   const [loading, setLoading] = useState<boolean>(true)
+
   const [logoutLoader, setLogoutLoader] = useState<boolean>(false)
 
-  const { userInfo, createdAt, username } = useSelector(
+  const { userInfo, createdAt, username, userTheme } = useSelector(
     (state: RootState) => state.auth,
   )
   const dispatch = useDispatch()
-  const { connectSocket, disconnectSocket, emitUserOnline } =
-    useContext(SocketContext)
+  const { disconnectSocket } = useContext(SocketContext)
 
   useEffect(() => {
     const currentUser = auth().currentUser
@@ -73,9 +75,13 @@ export default function Profile() {
     }
   }
 
+  const onSwitchValueChange = (val: boolean) => {
+    dispatch(updateTheme({ theme: !val ? 'dark' : 'light' }))
+  }
+
   if (loading) {
     return (
-      <HomeLayout noScroll>
+      <HomeLayout noScroll showHeader={false} headerTitle="Profile">
         <View
           style={{
             flex: 1,
@@ -83,7 +89,10 @@ export default function Profile() {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator
+            size="large"
+            color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
+          />
         </View>
       </HomeLayout>
     )
@@ -94,8 +103,20 @@ export default function Profile() {
       <View style={styles.container}>
         <AppText styles={styles.title}>My Profile</AppText>
 
-        <View style={styles.card}>
-          <Text style={styles.label}>Full Name</Text>
+        <View
+          style={[
+            styles.card,
+            {
+              borderColor:
+                userTheme == 'dark' ? Colors.white : Colors.darkBlack,
+            },
+          ]}>
+          <AppText
+            styles={{
+              ...styles.label,
+            }}>
+            Full Name
+          </AppText>
           <AppText
             styles={{
               marginTop: 5,
@@ -110,6 +131,23 @@ export default function Profile() {
             }}>
             {userInfo.email}
           </AppText>
+
+          <Text style={styles.label}>Toggle Theme</Text>
+          <View
+            style={{
+              justifyContent: 'flex-start',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginTop: 5,
+            }}>
+            <AppText styles={{ marginRight: 10 }}>Dark</AppText>
+            <Switch
+              value={userTheme == 'dark' ? false : true}
+              onValueChange={onSwitchValueChange}
+              thumbColor={Colors.socialPink}
+            />
+            <AppText styles={{ marginLeft: 10 }}>Light</AppText>
+          </View>
 
           <Text style={styles.label}>User Since</Text>
           <AppText
@@ -148,7 +186,6 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 30,
     borderWidth: 2,
-    borderColor: Colors.white,
   },
   label: {
     fontSize: 14,

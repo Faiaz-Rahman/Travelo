@@ -1,5 +1,6 @@
 import AppText from '@components/common/Text'
 import { Colors, Dim } from '@constants'
+import { RootState } from '@store/index'
 import {
   Pressable,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
+import { useSelector } from 'react-redux'
 
 interface ButtonProps {
   onPress: () => void
@@ -23,6 +25,8 @@ export default function Button({
   loading = false,
   style,
 }: ButtonProps) {
+  const { userTheme } = useSelector((state: RootState) => state.auth)
+
   return (
     <Pressable
       style={[styles.button, { ...style }]}
@@ -39,6 +43,7 @@ export default function Button({
             styles={{
               fontSize: 16,
               fontFamily: 'Roboto-Bold',
+              color: Colors.white,
             }}>
             {title}
           </AppText>

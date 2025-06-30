@@ -1,13 +1,23 @@
-import { useState, useEffect, useContext } from 'react'
-import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
+import { useState, useEffect, useRef } from 'react'
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  FlatList,
+  AppState,
+} from 'react-native'
 
-import { Colors, Dim } from '@constants'
+import { Colors, Dim, dummyData } from '@constants'
 
 import HomeLayout from '@layouts/HomeLayout'
 import Post from '@components/common/Post'
 
 import firestore from '@react-native-firebase/firestore'
-import { SocketContext } from '../../socket/SocketContext'
+
+import Animated from 'react-native-reanimated'
+import StoryItem from '@components/common/StoryItem'
+import { CommonActions, useNavigation } from '@react-navigation/native'
+import { useSocket } from '../../socket/SocketContext'
 
 interface PostType {
   title: string
@@ -20,6 +30,9 @@ export default function Home() {
   const [posts, setPosts] = useState<PostType[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+
+  const navigation = useNavigation()
+  const { emitUserOnline } = useSocket()
 
   const getPosts = async (isRefresh = false) => {
     try {
@@ -54,6 +67,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    emitUserOnline()
     getPosts()
   }, [])
 
@@ -61,6 +75,49 @@ export default function Home() {
     <HomeLayout noScroll>
       <View style={styles.home}>
         <View style={styles.postWrapper} />
+
+        <View style={{}}>
+          <Animated.FlatList
+            data={dummyData}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item: people, index }) => {
+              return (
+                <StoryItem
+                  key={index}
+                  item={people}
+                  onPress={() => {
+                    navigation.dispatch(
+                      CommonActions.navigate({
+                        name: 'story',
+                        params: {
+                          userImage: people.userImage,
+                          storyImage: people.storyImage,
+                        },
+                      }),
+                    )
+                  }}
+                />
+              )
+            }}
+            contentContainerStyle={{
+              marginTop: 32,
+              paddingLeft: Dim.width * 0.06,
+              paddingRight: 30,
+              height: 160,
+            }}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    width: 12,
+                    height: 140,
+                  }}
+                />
+              )
+            }}
+          />
+        </View>
 
         {loading && posts.length === 0 ? (
           <View style={styles.loader}>
@@ -99,7 +156,7 @@ const styles = StyleSheet.create({
   flatlist: {
     paddingLeft: Dim.width * 0.075,
     paddingRight: Dim.width * 0.075,
-    paddingBottom: Dim.height * 0.2,
+    paddingBottom: Dim.height * 0.42,
   },
   loader: {
     flex: 1,

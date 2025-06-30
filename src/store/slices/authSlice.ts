@@ -17,6 +17,7 @@ const initialState: StateType = {
   fcmToken: '',
   createdAt: '',
   username: '',
+  userTheme: '',
 }
 
 export const login = createAsyncThunk(
@@ -27,7 +28,6 @@ export const login = createAsyncThunk(
   ) => {
     try {
       const response = await auth().signInWithEmailAndPassword(email, password)
-      // console.log('response from thunk =>', response);
       return response.user
     } catch (error) {
       console.log('error in thunk =>', error)
@@ -104,6 +104,14 @@ const authSlice = createSlice({
     updateUsername: (state, actions) => {
       state.username = actions.payload
     },
+    updateTheme: (
+      state,
+      actions: PayloadAction<{
+        theme: 'dark' | 'light'
+      }>,
+    ) => {
+      state.userTheme = actions.payload.theme
+    },
   },
   extraReducers(builder) {
     builder.addCase(login.pending, (state, action) => {
@@ -133,6 +141,7 @@ export const {
   setFcmToken,
   updateUsername,
   updateUserSince,
+  updateTheme,
 } = authSlice.actions
 
 export default authSlice.reducer

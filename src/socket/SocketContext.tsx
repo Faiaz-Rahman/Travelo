@@ -1,4 +1,10 @@
-import { createContext, useEffect, useState, useCallback } from 'react'
+import {
+  createContext,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from 'react'
 import socket from '../socket/socket'
 
 import { useSelector } from 'react-redux'
@@ -30,6 +36,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const emitUserOnline = useCallback(() => {
     if (userInfo?.uid && socket.connected) {
+      console.log(
+        `userId [${userInfo.uid}] got online with socket id : ${socket.id}`,
+      )
+
       socket.emit('user-online', userInfo.uid)
     }
   }, [userInfo.uid])
@@ -40,14 +50,14 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [])
 
-  const disconnectSocket = useCallback(() => {
+  const disconnectSocket = () => {
     if (socket.connected) {
       socket.disconnect()
+
       setIsConnected(false)
       setActiveUsers([])
     }
-  }, [])
-
+  }
   useEffect(() => {
     const handleConnect = () => {
       console.log('Connected:', socket.id)
@@ -57,6 +67,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const handleDisconnect = () => {
       console.log('Disconnected from server')
+
+      disconnectSocket()
       setIsConnected(false)
     }
 
@@ -91,3 +103,5 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     </SocketContext.Provider>
   )
 }
+
+export const useSocket = () => useContext(SocketContext)

@@ -25,6 +25,8 @@ import TextInput from '@components/ui/TextInputField'
 import Feather from 'react-native-vector-icons/Feather'
 import Button from '@components/ui/Button'
 import HStack from '../HStack'
+import { useSelector } from 'react-redux'
+import { RootState } from '@store/index'
 
 interface PostProps {
   imageUrl: string
@@ -48,6 +50,7 @@ export default function Post({
     updateShowComments,
   } = useInteractionManager()
 
+  const { userTheme } = useSelector((state: RootState) => state.auth)
   return (
     <View style={styles.post}>
       {/* post header */}
@@ -90,9 +93,11 @@ export default function Post({
         />
       </TouchableHighlight>
 
-      <View style={styles.textWrapper}>
-        <AppText styles={styles.postText}>{title}</AppText>
-      </View>
+      {title && (
+        <View style={styles.textWrapper}>
+          <AppText styles={{}}>{title}</AppText>
+        </View>
+      )}
 
       {/* interaction wrapper */}
       <View style={styles.interactionWrapper}>
@@ -106,7 +111,7 @@ export default function Post({
             <MaterialCommunityIcons
               name={isLiked ? 'thumb-up' : 'thumb-up-outline'}
               size={16}
-              color={Colors.white}
+              color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
             />
           </TouchableOpacity>
           <AppText styles={styles.interactionText}>2,245</AppText>
@@ -120,7 +125,7 @@ export default function Post({
             <MaterialCommunityIcons
               name="message-outline"
               size={16}
-              color={Colors.white}
+              color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
             />
           </TouchableOpacity>
           <AppText styles={styles.interactionText}>45</AppText>
@@ -136,7 +141,7 @@ export default function Post({
             <MaterialCommunityIcons
               name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
               size={16}
-              color={Colors.white}
+              color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
             />
           </TouchableOpacity>
         </View>
@@ -161,12 +166,21 @@ export default function Post({
               outerWrapper={{
                 width: Dim.width * 0.6,
                 // backgroundColor: 'red',
+                height: 55,
+                borderRadius: 10,
               }}
               innerWrapper={{
                 width: '100%',
+                backgroundColor:
+                  userTheme == 'dark' ? Colors.darkGray : '#f8f4f4',
+                borderRadius: 5,
               }}
               icon={
-                <Feather size={20} color={Colors.white} name="message-circle" />
+                <Feather
+                  size={20}
+                  color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
+                  name="message-circle"
+                />
               }
               onChangeText={() => {}}
               placeholder="Your comment ..."

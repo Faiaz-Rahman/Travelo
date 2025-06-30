@@ -23,6 +23,7 @@ export default function TextInput({
   children,
   useGradient = true,
   cursorColor,
+  value,
 }: AppTextInputProps) {
   return (
     <View style={[styles.inputWrapper, style]}>
@@ -34,6 +35,7 @@ export default function TextInput({
         placeholderTextColor={placeholderTextColor}
         onBlur={onBlur}
         onFocus={onFocus}
+        value={value}
       />
       <TouchableOpacity style={[styles.gradient]} onPress={onBlur}>
         {useGradient ? (

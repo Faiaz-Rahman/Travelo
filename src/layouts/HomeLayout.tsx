@@ -5,6 +5,7 @@ import {
   ScrollView,
   Pressable,
   Image,
+  useColorScheme,
 } from 'react-native'
 
 import { Colors, Dim } from '@constants'
@@ -13,7 +14,7 @@ import AppText from '@components/common/Text'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { HomeLayoutProps } from 'src/interfaces'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@store/index'
 import { useNavigation } from '@react-navigation/native'
 
@@ -21,6 +22,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import React, { useContext } from 'react'
 import { SocketContext } from '../socket/SocketContext'
 import HStack from '@components/common/HStack'
+import { updateTheme } from '@store/slices/authSlice'
+import { StatusBar } from 'react-native'
 
 export default function HomeLayout({
   children,
@@ -31,23 +34,39 @@ export default function HomeLayout({
   active = false,
   headerTitle,
 }: HomeLayoutProps) {
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, userTheme } = useSelector((state: RootState) => state.auth)
   const navigation = useNavigation()
 
-  const { connectSocket } = useContext(SocketContext)
-  const { isConnected } = useContext(SocketContext)
+  const { connectSocket, isConnected } = useContext(SocketContext)
+
+  const dispatch = useDispatch()
+  const theme = useColorScheme() == 'dark'
 
   const socketEvent = () => {
     connectSocket()
   }
 
   React.useEffect(() => {
+    if (!userTheme) {
+      dispatch(updateTheme({ theme: theme ? 'dark' : 'light' }))
+    }
+
     socketEvent()
   }, [])
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: userTheme == 'light' ? Colors.white : Colors.darkBlack,
+      }}>
       {/* Header */}
+      <StatusBar
+        backgroundColor={'transparent'}
+        barStyle={userTheme == 'light' ? 'dark-content' : 'light-content'}
+        translucent
+      />
+
       {showHeader && (
         <View style={styles.header}>
           <AppText styles={styles.greetText}>
@@ -55,16 +74,22 @@ export default function HomeLayout({
           </AppText>
 
           <TouchableOpacity
-            style={styles.headerIconWrapper}
+            style={[
+              styles.headerIconWrapper,
+              {
+                backgroundColor:
+                  userTheme == 'light' ? Colors.white : Colors.darkBlack,
+              },
+            ]}
             onPress={() => {
-              // console.log('notifications')
               navigation.navigate('active_users_list' as never)
             }}>
             <MaterialCommunityIcons
               name="email-outline"
               size={20}
-              color={Colors.white}
+              color={userTheme == 'light' ? Colors.darkBlack : Colors.white}
             />
+
             <View
               style={[
                 styles.badge,
@@ -85,14 +110,10 @@ export default function HomeLayout({
             }}>
             <Ionicons name="chevron-back" size={25} color={Colors.white} />
           </Pressable>
+
           <Image
             source={require('@assets/images/user1.png')}
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-              marginLeft: 10,
-            }}
+            style={styles.image}
           />
 
           <AppText
@@ -149,31 +170,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerIconWrapper: {
-    height: 32,
-    width: 32,
+    height: 35,
+    width: 35,
     borderColor: Colors.darkGray,
     borderRadius: 32,
-    borderWidth: 1,
-    backgroundColor: Colors.darkBlack,
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
   badge: {
-    height: 7,
-    width: 7,
+    height: 10,
+    width: 10,
     backgroundColor: Colors.socialPink,
     borderWidth: 1,
     borderColor: '#fff',
     borderRadius: 10,
     position: 'absolute',
-    top: 7,
-    right: 5,
+    top: 5,
+    right: 4,
   },
   greetText: {
     fontSize: 17,
     fontFamily: 'Roboto-SemiBold',
-    color: Colors.white,
   },
   backHeaderWrapper: {
     height: Dim.height * 0.07,
@@ -181,5 +200,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: Dim.width * 0.075,
     alignItems: 'center',
+  },
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    marginLeft: 10,
   },
 })
