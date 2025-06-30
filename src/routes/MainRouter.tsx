@@ -4,6 +4,7 @@ import { HomeRouter } from '@routes/HomeRouter'
 import ActiveUsersList from '@screens/ActiveUsersList'
 
 import MessagingScreen from '@screens/MessagingScreen'
+import StoryScreen from '@screens/Story'
 
 export type RootStackParamList = {
   home_tab: undefined
@@ -14,6 +15,7 @@ export type RootStackParamList = {
       name: string
     }
   }
+  story: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -28,6 +30,7 @@ export const MainRouter = () => {
       <Stack.Screen name="home_tab" component={HomeRouter} />
       <Stack.Screen name="chat_details" component={MessagingScreen} />
       <Stack.Screen name="active_users_list" component={ActiveUsersList} />
+      <Stack.Screen name="story" component={StoryScreen} />
     </Stack.Navigator>
   )
 }
