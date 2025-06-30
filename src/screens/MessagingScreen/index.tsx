@@ -29,7 +29,7 @@ export default function MessagingScreen() {
 
   const chatId = [currentUser._id, otherUser.id].sort().join('_')
 
-  console.log(chatId)
+  console.log('chatId', chatId)
 
   useEffect(() => {
     const unsubscribe = firestore()

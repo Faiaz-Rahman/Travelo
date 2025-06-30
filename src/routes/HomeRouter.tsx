@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '@screens/Home'
 
-import { Image, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { Colors, Dim } from '@constants'
 
 import Feather from 'react-native-vector-icons/Feather'
@@ -15,9 +15,43 @@ import ActiveUsersList from '@screens/ActiveUsersList'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
+// import Animated, {
+//   Easing,
+//   Extrapolation,
+//   interpolate,
+//   useAnimatedStyle,
+//   useSharedValue,
+//   withTiming,
+// } from 'react-native-reanimated'
+
 const Tab = createBottomTabNavigator()
 
 export const HomeRouter = (): React.JSX.Element => {
+  // const sharedValue = useSharedValue(0)
+  // const [addNewFocused, setAddNewFocused] = useState<boolean>(false)
+
+  // const beatAnimation = useAnimatedStyle(() => {
+  //   const scale = interpolate(
+  //     sharedValue.value,
+  //     [0, 10],
+  //     [0, 1.1],
+  //     Extrapolation.CLAMP,
+  //   )
+
+  //   return {
+  //     transform: [{ scale }],
+  //   }
+  // })
+
+  // const beatAnimationFunc = () => {
+  //   console.log('beatAnimationFunc. was called!')
+
+  //   sharedValue.value = withTiming(10, {
+  //     duration: 200,
+  //     easing: Easing.bounce,
+  //   })
+  // }
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -41,7 +75,7 @@ export const HomeRouter = (): React.JSX.Element => {
                 style={{
                   height: 20,
                   width: 20,
-                  tintColor: focused ? Colors.white : Colors.lighterGray,
+                  tintColor: color,
                 }}
                 resizeMode="contain"
               />
@@ -64,22 +98,18 @@ export const HomeRouter = (): React.JSX.Element => {
         name="post"
         component={AddNewPost}
         options={{
-          tabBarIcon: ({ color, focused, size }) => {
+          tabBarIcon: ({ color, focused, size, ...props }) => {
             return (
-              <LinearGradient
-                colors={Colors.gradient}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                locations={[0, 0.25, 0.6]}
-                style={{
-                  height: 50,
-                  width: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 50,
-                }}>
-                <Feather name="plus" size={25} color={Colors.white} />
-              </LinearGradient>
+              <View style={{}} onLayout={() => {}}>
+                <LinearGradient
+                  colors={Colors.gradient}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 0 }}
+                  locations={[0, 0.25, 0.6]}
+                  style={[styles.gradient]}>
+                  <Feather name="plus" size={25} color={Colors.white} />
+                </LinearGradient>
+              </View>
             )
           },
         }}
@@ -113,3 +143,13 @@ export const HomeRouter = (): React.JSX.Element => {
     </Tab.Navigator>
   )
 }
+
+const styles = StyleSheet.create({
+  gradient: {
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+  },
+})
