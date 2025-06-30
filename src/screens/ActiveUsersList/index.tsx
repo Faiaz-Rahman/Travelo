@@ -1,83 +1,74 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import HomeLayout from '@layouts/HomeLayout'
 import AppText from '@components/common/Text'
 import { ActivityIndicator, FlatList, StatusBar, View } from 'react-native'
 import { Colors, Dim } from '@constants'
 
-import socket from '../../socket/socket'
 import ActiveUserComponent from '@components/common/ActiveUserComponent'
 import { RootState } from '@store/index'
 import { useSelector } from 'react-redux'
-import { useFocusEffect } from '@react-navigation/native'
 
-import { SocketContext } from '../../socket/SocketContext'
+import { useSocket } from '../../socket/SocketContext'
 
 import firestore from '@react-native-firebase/firestore'
 
-interface userDetailsData {
+interface FBUserQueryData {
   createdAt: string
   email: string
   fcm: string
   name: string
+  uid?: string
 }
 
 export default function ActiveUsersList() {
-  const [users, setUsers] = useState<any>([])
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, userTheme } = useSelector((state: RootState) => state.auth)
 
-  const [userDetailsData, setUserDetailsData] = useState<any>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [userDetailsData, setUserDetailsData] = useState<
+    Array<FBUserQueryData>
+  >([])
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const { isConnected, activeUsers, emitUserOnline } = useContext(SocketContext)
+  const { activeUsers } = useSocket()
 
-  useFocusEffect(
-    useCallback(() => {
-      emitUserOnline()
-      setLoading(true)
-    }, [userInfo.uid]),
-  )
+  const getUserDetailsData = async () => {
+    if (activeUsers && activeUsers.length > 0) {
+      const activeUsersWithoutMe = activeUsers.filter(
+        user => user != userInfo.uid,
+      )
+
+      const updatedData = await Promise.all(
+        activeUsersWithoutMe.map(async uid => {
+          try {
+            const userDataFromFb = await firestore()
+              .collection('users')
+              .doc(uid)
+              .get()
+
+            if (userDataFromFb.exists()) {
+              return { ...userDataFromFb.data(), uid }
+            }
+          } catch (error) {
+            console.error(`failed to fetch data for $${uid}: `, error)
+            return []
+          }
+        }),
+      )
+
+      if (updatedData.length) {
+        setUserDetailsData(updatedData as never[])
+      }
+      setLoading(false)
+    }
+  }
 
   React.useEffect(() => {
-    const getUserDetailsData = async () => {
-      if (activeUsers && activeUsers.length > 0) {
-        const tempActiveUsers = activeUsers.filter(uid => uid !== userInfo.uid)
-
-        const updatedData = await Promise.all(
-          tempActiveUsers.map(async uid => {
-            try {
-              const doc = await firestore().collection('users').doc(uid).get()
-              if (doc.exists()) {
-                return { ...doc.data(), uid }
-              }
-            } catch (error) {
-              console.warn(`Failed to fetch data for ${uid}`, error)
-              return null
-            }
-          }),
-        )
-
-        const filteredData = updatedData.filter(Boolean)
-        console.log('updatedData =>', filteredData)
-        setUserDetailsData(filteredData)
-        setLoading(true)
-      } else {
-        setUserDetailsData([])
-        setLoading(true)
-      }
-    }
-
     getUserDetailsData()
   }, [activeUsers])
 
   return (
     <HomeLayout noScroll showHeader={false} headerTitle="Active Users">
-      <StatusBar
-        backgroundColor={'transparent'}
-        barStyle={'light-content'}
-        translucent
-      />
-      {loading ? (
+      {!loading ? (
         userDetailsData.length == 0 ? (
           <View
             style={{ width: Dim.width, alignItems: 'center', paddingTop: 20 }}>
@@ -109,7 +100,15 @@ export default function ActiveUsersList() {
           />
         )
       ) : (
-        <ActivityIndicator size="large" color={Colors.white} />
+        <View
+          style={{
+            paddingTop: 30,
+          }}>
+          <ActivityIndicator
+            size="large"
+            color={userTheme == 'dark' ? Colors.white : Colors.darkBlack}
+          />
+        </View>
       )}
     </HomeLayout>
   )
