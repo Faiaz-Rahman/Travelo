@@ -32,17 +32,16 @@ export default function SearchLayout({
         paddingTop: 50,
       }}>
       <StatusBar
-        barStyle={'light-content'}
-        backgroundColor={Colors.darkBlack}
+        backgroundColor={'transparent'}
+        barStyle={userTheme == 'light' ? 'dark-content' : 'light-content'}
         translucent
       />
 
       <View style={styles.searchBarWrapper}>
         <TextInput
+          value={searchText}
           useGradient={false}
           style={{
-            // width: Dim.width * 0.9,
-            // backgroundColor: 'red',
             width: Dim.width * 0.8,
             backgroundColor:
               userTheme == 'light' ? Colors.white : Colors.darkBlack,

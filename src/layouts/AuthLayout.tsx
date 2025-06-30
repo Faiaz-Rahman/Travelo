@@ -6,9 +6,14 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  useColorScheme,
 } from 'react-native'
 
 import { Colors } from '@constants'
+
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateTheme } from '@store/slices/authSlice'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -19,6 +24,13 @@ export default function AuthLayout({
   children,
   noScroll = true,
 }: AuthLayoutProps) {
+  const isDark = useColorScheme() == 'dark'
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(updateTheme({ theme: isDark ? 'dark' : 'light' }))
+  }, [])
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.darkBlack }}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -42,7 +54,6 @@ export default function AuthLayout({
             behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
             <View style={[styles.overlay]}>
               <ScrollView
-                // keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
                   flex: 1,
                   justifyContent: 'center',

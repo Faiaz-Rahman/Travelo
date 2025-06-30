@@ -23,6 +23,7 @@ import React, { useContext } from 'react'
 import { SocketContext } from '../socket/SocketContext'
 import HStack from '@components/common/HStack'
 import { updateTheme } from '@store/slices/authSlice'
+import { StatusBar } from 'react-native'
 
 export default function HomeLayout({
   children,
@@ -36,8 +37,7 @@ export default function HomeLayout({
   const { userInfo, userTheme } = useSelector((state: RootState) => state.auth)
   const navigation = useNavigation()
 
-  const { connectSocket } = useContext(SocketContext)
-  const { isConnected } = useContext(SocketContext)
+  const { connectSocket, isConnected } = useContext(SocketContext)
 
   const dispatch = useDispatch()
   const theme = useColorScheme() == 'dark'
@@ -61,6 +61,12 @@ export default function HomeLayout({
         backgroundColor: userTheme == 'light' ? Colors.white : Colors.darkBlack,
       }}>
       {/* Header */}
+      <StatusBar
+        backgroundColor={'transparent'}
+        barStyle={userTheme == 'light' ? 'dark-content' : 'light-content'}
+        translucent
+      />
+
       {showHeader && (
         <View style={styles.header}>
           <AppText styles={styles.greetText}>
@@ -76,7 +82,6 @@ export default function HomeLayout({
               },
             ]}
             onPress={() => {
-              // console.log('notifications')
               navigation.navigate('active_users_list' as never)
             }}>
             <MaterialCommunityIcons
@@ -84,6 +89,7 @@ export default function HomeLayout({
               size={20}
               color={userTheme == 'light' ? Colors.darkBlack : Colors.white}
             />
+
             <View
               style={[
                 styles.badge,
@@ -104,14 +110,10 @@ export default function HomeLayout({
             }}>
             <Ionicons name="chevron-back" size={25} color={Colors.white} />
           </Pressable>
+
           <Image
             source={require('@assets/images/user1.png')}
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-              marginLeft: 10,
-            }}
+            style={styles.image}
           />
 
           <AppText
@@ -178,15 +180,15 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   badge: {
-    height: 7,
-    width: 7,
+    height: 10,
+    width: 10,
     backgroundColor: Colors.socialPink,
     borderWidth: 1,
     borderColor: '#fff',
     borderRadius: 10,
     position: 'absolute',
-    top: 7,
-    right: 5,
+    top: 5,
+    right: 4,
   },
   greetText: {
     fontSize: 17,
@@ -198,5 +200,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: Dim.width * 0.075,
     alignItems: 'center',
+  },
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    marginLeft: 10,
   },
 })
