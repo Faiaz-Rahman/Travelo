@@ -3,6 +3,8 @@ import React from 'react'
 import { Colors, Dim } from '@constants'
 import AppText from '../Text'
 import { CommonActions, useNavigation } from '@react-navigation/native'
+import { RootState } from '@store/index'
+import { useSelector } from 'react-redux'
 
 interface ActiveUserComponentProps {
   username: string
@@ -16,6 +18,7 @@ export default function ActiveUserComponent({
   uid = '',
 }: ActiveUserComponentProps) {
   const navigation = useNavigation()
+  const { userTheme } = useSelector((state: RootState) => state.auth)
 
   const moveToDetails = () => {
     navigation.dispatch(
@@ -33,9 +36,11 @@ export default function ActiveUserComponent({
 
   return (
     <Pressable
-      style={styles.activeUserWrapper}
+      style={[
+        styles.activeUserWrapper,
+        { borderColor: userTheme == 'dark' ? Colors.white : Colors.darkBlack },
+      ]}
       onPress={() => {
-        // console.log('open chat ...')
         moveToDetails()
       }}>
       <View style={{ position: 'relative' }}>
