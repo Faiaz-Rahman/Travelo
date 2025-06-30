@@ -53,6 +53,7 @@ export interface StateType {
   fcmToken: string
   createdAt: string
   username: string
+  userTheme: 'dark' | 'light' | ''
 }
 
 export interface AppTextInputProps {
@@ -65,4 +66,5 @@ export interface AppTextInputProps {
   children?: React.ReactNode
   useGradient?: boolean
   cursorColor?: string
+  value: string
 }
